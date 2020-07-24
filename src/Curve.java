@@ -6,6 +6,14 @@ public class Curve {
     ArrayList<Integer> xCoords;
     ArrayList<Integer> yCoords;
 
+    static double factor = 0.1;
+
+    //blank curve
+    public Curve() {
+        xCoords = new ArrayList<>();
+        yCoords = new ArrayList<>();
+    }
+
     //Initial curve definition
     public Curve(int x, int y, int x2, int y2) {
         xCoords = new ArrayList<>();
@@ -33,30 +41,36 @@ public class Curve {
             this.yCoords.add(curve.yCoords.get(i));
         }
 
-        int originX;
-        int originY;
+    }
 
-        originX = xCoords.get(xCoords.size() - 1);
-        originY = yCoords.get(yCoords.size() - 1);
+    public void iterate() {
+        int newX;
+        int newY;
+        int refX;
+        int refY;
+        int originX = xCoords.get(xCoords.size() - 1);
+        int originY = yCoords.get(yCoords.size() - 1);
+        Curve tempCurve = new Curve();
 
-        System.out.print(originX + ", ");
-        System.out.println(originY);
-
-        int adjustedX;
-        int adjustedY;
-
-        int size = xCoords.size();
-
-        if(xCoords.size() > 0 && yCoords.size() > 0) {
-            for (int i = 0; i < size; i++) {
-                adjustedX = xCoords.get(i) - originX;
-                adjustedY = yCoords.get(i) - originY;
-                int newX = (int) Math.round(adjustedX * Math.cos(Math.PI / 2) - adjustedY * Math.sin(Math.PI / 2));
-                int newY = (int) Math.round(adjustedY * Math.cos(Math.PI / 2) + adjustedX * Math.sin(Math.PI / 2));
-                xCoords.add(newX + originX);
-                yCoords.add(newY + originY);
-            }
+        for(int i = xCoords.size() - 1; i >= 0; i--) {
+         tempCurve.xCoords.add(xCoords.get(i));
+         tempCurve.yCoords.add(yCoords.get(i));
         }
+
+
+
+        for (int i = 1; i < tempCurve.xCoords.size(); i++) {
+            refX = xCoords.get(i);
+            refY = yCoords.get(i);
+
+            newX = (int) Math.round(refX * Math.cos(factor*Math.PI) - refY * Math.sin(factor*Math.PI));
+
+            newY = (int) Math.round(refX * Math.sin(factor*Math.PI) + refY * Math.cos(factor*Math.PI));
+
+            this.xCoords.add((newX + originX));
+            this.yCoords.add((newY + originY));
+        }
+
     }
 
 }
